@@ -170,7 +170,7 @@ const CalculadoraLoteria = () => {
         </tbody>
       </table>
 
-      <button onClick={calcularTotales} className='btn btn-primary'>
+      <button onClick={calcularTotales} className="btn-purple">
         Calcular
       </button>
 

@@ -24,4 +24,11 @@
     padding: 10px 20px;
     font-size: 16px;
   }
-  
+  .btn-purple {
+    background-color: #6f42c1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
