@@ -170,7 +170,7 @@ const CalculadoraLoteria = () => {
         </tbody>
       </table>
 
-      <button onClick={calcularTotales} className="btn-purple">
+      <button onClick={calcularTotales} style={estiloBoton}>
         Calcular
       </button>
 
@@ -197,6 +197,7 @@ const estiloBoton = {
   marginTop: '20px',
   padding: '10px 20px',
   fontSize: '16px',
+  backgroundColor:'#6f42c1',
 };
 
 export default CalculadoraLoteria;
