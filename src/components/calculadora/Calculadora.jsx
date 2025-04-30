@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './CalculadoraLoteria.css'; // Asegúrate de importar el archivo CSS
 
 const precios = {
   lunes: 1000,
@@ -78,8 +79,8 @@ const CalculadoraLoteria = () => {
 
     setDatosPuestos(nuevosDatos);
     setTotales({
-      devolucion: (precioDia*totalDevolucion).toFixed(2),
-      perdida: (precioDia*totalPerdida).toFixed(2),
+      devolucion: (precioDia * totalDevolucion).toFixed(2),
+      perdida: (precioDia * totalPerdida).toFixed(2),
       general: totalGeneral.toFixed(2),
     });
   };
@@ -91,13 +92,13 @@ const CalculadoraLoteria = () => {
   });
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div className="calculadora-container">
       <h1>Calculadora de Lotería</h1>
 
-      <div>
+      <div className="dia-seleccion">
         <strong>Día:</strong>
         {Object.keys(precios).map((dia) => (
-          <label key={dia} style={{ marginLeft: '10px' }}>
+          <label key={dia}>
             <input
               type="checkbox"
               value={dia}
@@ -109,94 +110,73 @@ const CalculadoraLoteria = () => {
         ))}
       </div>
 
-      <table style={{ borderCollapse: 'collapse', width: '100%', marginTop: '20px' }}>
-        <thead>
-          <tr>
-            <th style={estiloCelda}>Puesto</th>
-            <th style={estiloCelda}>Cantidad</th>
-            <th style={estiloCelda}>Agregado</th>
-            <th style={estiloCelda}>Pérdidas</th>
-            <th style={estiloCelda}>Devolución</th>
-            <th style={estiloCelda}>%</th>
-            <th style={estiloCelda}>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {datosPuestos.map((puesto, indice) => (
-            <tr key={indice}>
-              <td style={estiloCelda}>{puesto.nombre}</td>
-              <td style={estiloCelda}>
-                <input
-                  type="number"
-                  value={puesto.cantidad}
-                  onChange={(e) => manejarCambioPuesto(indice, 'cantidad', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="number"
-                  value={puesto.agregado}
-                  onChange={(e) => manejarCambioPuesto(indice, 'agregado', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="number"
-                  value={puesto.perdidas}
-                  onChange={(e) => manejarCambioPuesto(indice, 'perdidas', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="number"
-                  value={puesto.devolucion}
-                  onChange={(e) => manejarCambioPuesto(indice, 'devolucion', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="checkbox"
-                  checked={puesto.porcentaje}
-                  onChange={(e) => manejarCambioPuesto(indice, 'porcentaje', e.target.checked)}
-                />
-              </td>
-              <td style={estiloCelda}>₡{puesto.total}</td>
+      <div className="tabla-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Puesto</th>
+              <th>Cantidad</th>
+              <th>Agregado</th>
+              <th>Pérdidas</th>
+              <th>Devolución</th>
+              <th>%</th>
+              <th>Total</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {datosPuestos.map((puesto, indice) => (
+              <tr key={indice}>
+                <td data-label="Puesto">{puesto.nombre}</td>
+                <td data-label="Cantidad">
+                  <input
+                    type="number"
+                    value={puesto.cantidad}
+                    onChange={(e) => manejarCambioPuesto(indice, 'cantidad', e.target.value)}
+                  />
+                </td>
+                <td data-label="Agregado">
+                  <input
+                    type="number"
+                    value={puesto.agregado}
+                    onChange={(e) => manejarCambioPuesto(indice, 'agregado', e.target.value)}
+                  />
+                </td>
+                <td data-label="Pérdidas">
+                  <input
+                    type="number"
+                    value={puesto.perdidas}
+                    onChange={(e) => manejarCambioPuesto(indice, 'perdidas', e.target.value)}
+                  />
+                </td>
+                <td data-label="Devolución">
+                  <input
+                    type="number"
+                    value={puesto.devolucion}
+                    onChange={(e) => manejarCambioPuesto(indice, 'devolucion', e.target.value)}
+                  />
+                </td>
+                <td data-label="%">
+                  <input
+                    type="checkbox"
+                    checked={puesto.porcentaje}
+                    onChange={(e) => manejarCambioPuesto(indice, 'porcentaje', e.target.checked)}
+                  />
+                </td>
+                <td data-label="Total">₡{puesto.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <button onClick={calcularTotales} style={estiloBoton}>
-        Calcular
-      </button>
+      <button onClick={calcularTotales}>Calcular</button>
 
       <h3>Totales Generales</h3>
       <p>Total Devolución: ₡{totales.devolucion}</p>
-      <p>Total Pérdida: ₡{totales.perdida }</p>
+      <p>Total Pérdida: ₡{totales.perdida}</p>
       <p>Total General: ₡{totales.general}</p>
     </div>
   );
-};
-
-const estiloCelda = {
-  border: '1px solid #ddd',
-  padding: '8px',
-  textAlign: 'center',
-};
-
-const estiloInput = {
-  width: '80px',
-  padding: '4px',
-};
-
-const estiloBoton = {
-  marginTop: '20px',
-  padding: '10px 20px',
-  fontSize: '16px',
 };
 
 export default CalculadoraLoteria;
