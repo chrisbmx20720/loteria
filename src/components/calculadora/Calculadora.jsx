@@ -78,9 +78,9 @@ const CalculadoraLoteria = () => {
 
     setDatosPuestos(nuevosDatos);
     setTotales({
-      devolucion: (precioDia*totalDevolucion).toFixed(2),
-      perdida: (precioDia*totalPerdida).toFixed(2),
-      general: totalGeneral.toFixed(2),
+      devolucion: (precioDia*totalDevolucion),
+      perdida: (precioDia*totalPerdida),
+      general: totalGeneral,
     });
   };
 
