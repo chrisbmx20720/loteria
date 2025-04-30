@@ -78,9 +78,9 @@ const CalculadoraLoteria = () => {
 
     setDatosPuestos(nuevosDatos);
     setTotales({
-      devolucion: (precioDia*totalDevolucion),
-      perdida: (precioDia*totalPerdida),
-      general: totalGeneral,
+      devolucion: (precioDia*totalDevolucion).toFixed(2),
+      perdida: (precioDia*totalPerdida).toFixed(2),
+      general: totalGeneral.toFixed(2),
     });
   };
 
@@ -127,7 +127,7 @@ const CalculadoraLoteria = () => {
               <td style={estiloCelda}>{puesto.nombre}</td>
               <td style={estiloCelda}>
                 <input
-                  type="number"
+                  type="text"
                   value={puesto.cantidad}
                   onChange={(e) => manejarCambioPuesto(indice, 'cantidad', e.target.value)}
                   style={estiloInput}
@@ -135,7 +135,7 @@ const CalculadoraLoteria = () => {
               </td>
               <td style={estiloCelda}>
                 <input
-                  type="number"
+                  type="text"
                   value={puesto.agregado}
                   onChange={(e) => manejarCambioPuesto(indice, 'agregado', e.target.value)}
                   style={estiloInput}
@@ -143,7 +143,7 @@ const CalculadoraLoteria = () => {
               </td>
               <td style={estiloCelda}>
                 <input
-                  type="number"
+                  type="text"
                   value={puesto.perdidas}
                   onChange={(e) => manejarCambioPuesto(indice, 'perdidas', e.target.value)}
                   style={estiloInput}
@@ -151,7 +151,7 @@ const CalculadoraLoteria = () => {
               </td>
               <td style={estiloCelda}>
                 <input
-                  type="number"
+                  type="text"
                   value={puesto.devolucion}
                   onChange={(e) => manejarCambioPuesto(indice, 'devolucion', e.target.value)}
                   style={estiloInput}
