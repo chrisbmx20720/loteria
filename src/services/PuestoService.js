@@ -1,4 +1,4 @@
-import { ApiUrl } from '../config/config';
+/*import { ApiUrl } from '../config/config';
 
 const apiUrl = `${ApiUrl}/puestos`;
 
@@ -106,4 +106,35 @@ export const deletePuesto = async (id) => {
     console.error('Error al eliminar el puesto:', error);
     throw error;
   }
+};
+*/
+
+// src/services/puestosService.js
+const API_URL = 'http://localhost:3001/puestos';
+
+export const obtenerPuestos = async () => {
+  const res = await fetch(API_URL);
+  return res.json();
+};
+
+export const crearPuesto = async (nuevoPuesto) => {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(nuevoPuesto),
+  });
+  return res.json();
+};
+
+
+export const editarPuesto = (puestoId, puestoActualizado) => {
+  return fetch(`http://localhost:3001/puestos/${puestoId}`, {
+    method: 'PUT',
+    body: JSON.stringify(puestoActualizado),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .catch(err => console.error('Error al editar el puesto:', err));
 };

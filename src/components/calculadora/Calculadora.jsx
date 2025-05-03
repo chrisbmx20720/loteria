@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 
 const precios = {
   lunes: 1000,
@@ -6,198 +7,243 @@ const precios = {
   miércoles: 2000,
 };
 
-const puestosIniciales = [
-  'Puesto A',
-  'Puesto B',
-  'Puesto C',
-  'Puesto D',
-  'Puesto E',
-  'Puesto F',
-  'Puesto G',
-  'Puesto H',
-  'Puesto I',
-  'Puesto J',
-];
+const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
+  const [datosPuestos, setDatosPuestos] = useState([]);
+  const [diaVisible, setDiaVisible] = useState('dia1');
+  const [diasSeleccionados, setDiasSeleccionados] = useState([]);
+  const [edicionPuesto, setEdicionPuesto] = useState(null);
+  const [totalGeneral, setTotalGeneral] = useState(0);
 
-const CalculadoraLoteria = () => {
-  const [diaSeleccionado, setDiaSeleccionado] = useState('');
-  const [datosPuestos, setDatosPuestos] = useState(
-    puestosIniciales.map((puesto) => ({
-      nombre: puesto,
-      cantidad: 0,
-      agregado: 0,
-      perdidas: 0,
-      devolucion: 0,
-      porcentaje: false,
-      total: 0,
-    }))
-  );
+  useEffect(() => {
+    const puestosConTotal = puestos.map((p) => ({
+      ...p,
+      total: p.total || '0.00',
+    }));
+    setDatosPuestos(puestosConTotal);
+  }, [puestos]);
 
-  const manejarCambioDia = (evento) => {
-    const { value } = evento.target;
-    setDiaSeleccionado((prevDia) => (prevDia === value ? '' : value));
-  };
-
-  const manejarCambioPuesto = (indice, campo, valor) => {
-    const nuevosDatos = [...datosPuestos];
-    if (campo === 'porcentaje') {
-      nuevosDatos[indice][campo] = valor;
-    } else {
-      nuevosDatos[indice][campo] = parseFloat(valor) || 0;
-    }
-    setDatosPuestos(nuevosDatos);
+  const manejarSeleccionDiaPrecio = (dia) => {
+    setDiasSeleccionados((prev) =>
+      prev.includes(dia) ? prev.filter((d) => d !== dia) : [...prev, dia]
+    );
   };
 
   const calcularTotales = () => {
-    if (!diaSeleccionado) {
-      alert('Por favor, selecciona un día.');
+    if (diasSeleccionados.length === 0) {
+      alert('Selecciona al menos un día con precio.');
       return;
     }
 
-    const precioDia = precios[diaSeleccionado];
-    let totalDevolucion = 0;
-    let totalPerdida = 0;
     let totalGeneral = 0;
 
-    const nuevosDatos = datosPuestos.map((puesto) => {
-      const { cantidad, agregado, perdidas, devolucion, porcentaje } = puesto;
-      const base = cantidad + agregado - perdidas;
-      const totalSinDescuento = base * precioDia;
-      const descuento = porcentaje ? totalSinDescuento * 0.04 : 0;
-      const total = totalSinDescuento - descuento;
+    const nuevosPuestos = datosPuestos.map((puesto) => {
+      const cantidad = Number(puesto.cantidades[diaVisible]) || 0;
+      const agregado = Number(puesto.agregado) || 0;
+      const perdidas = Number(puesto.perdidas) || 0;
+      const tienePorcentaje = puesto.porcentaje;
 
-      totalDevolucion += devolucion;
-      totalPerdida += perdidas;
+      let total = 0;
+      diasSeleccionados.forEach((dia) => {
+        const precio = precios[dia];
+        const base = cantidad + agregado - perdidas;
+        const subtotal = base * precio;
+        const descuento = tienePorcentaje ? subtotal * 0.04 : 0;
+        total += subtotal - descuento;
+      });
+
       totalGeneral += total;
 
-      return {
-        ...puesto,
-        total: total.toFixed(2),
-      };
+      return { ...puesto, total: total.toFixed(2) };
     });
 
-    setDatosPuestos(nuevosDatos);
-    setTotales({
-      devolucion: (precioDia*totalDevolucion).toFixed(2),
-      perdida: (precioDia*totalPerdida).toFixed(2),
-      general: totalGeneral.toFixed(2),
-    });
+    setDatosPuestos(nuevosPuestos);
+    setTotalGeneral(totalGeneral.toFixed(2));
   };
 
-  const [totales, setTotales] = useState({
-    devolucion: '0.00',
-    perdida: '0.00',
-    general: '0.00',
-  });
+  const editarPuesto = (puesto) => {
+    setEdicionPuesto({ ...puesto });
+  };
+
+  const guardarEdicion = () => {
+    actualizarPuesto(edicionPuesto);
+    setEdicionPuesto(null);
+  };
+
+  const manejarCambioEdicion = (campo, valor) => {
+    setEdicionPuesto((prev) => ({
+      ...prev,
+      [campo]: valor,
+    }));
+  };
+
+  const estilosBoton = {
+    backgroundColor: '#6a0dad',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    padding: '6px 10px',
+    margin: '2px',
+    cursor: 'pointer',
+  };
+
+  const estilosBoton1 = {
+    backgroundColor: '#d4edda',
+    color: '#0b2e13',
+    border: 'none',
+    borderRadius: '5px',
+    padding: '6px 10px',
+    margin: '2px',
+    cursor: 'pointer',
+  };
+
+  const responsiveStyle = {
+    overflowX: 'auto',
+    maxWidth: '100%',
+  };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Calculadora de Lotería</h1>
+    <div style={{ padding: '10px' }}>
+      <h2>Calculadora de Lotería</h2>
 
       <div>
-        <strong>Día:</strong>
+        <label>
+          Día visible:
+          <select value={diaVisible} onChange={(e) => setDiaVisible(e.target.value)} style={{ marginLeft: '10px' }}>
+            <option value="dia1">Día 1</option>
+            <option value="dia2">Día 2</option>
+            <option value="dia3">Día 3</option>
+          </select>
+        </label>
+      </div>
+
+      <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap' }}>
+        <strong>Días con precio:</strong>
         {Object.keys(precios).map((dia) => (
           <label key={dia} style={{ marginLeft: '10px' }}>
             <input
               type="checkbox"
               value={dia}
-              checked={diaSeleccionado === dia}
-              onChange={manejarCambioDia}
+              checked={diasSeleccionados.includes(dia)}
+              onChange={() => manejarSeleccionDiaPrecio(dia)}
             />
-            {` ${dia.charAt(0).toUpperCase() + dia.slice(1)} (₡${precios[dia]})`}
+            {` ${dia} (₡${precios[dia]})`}
           </label>
         ))}
       </div>
 
-      <table style={{ borderCollapse: 'collapse', width: '100%', marginTop: '20px' }}>
-        <thead>
-          <tr>
-            <th style={estiloCelda}>Puesto</th>
-            <th style={estiloCelda}>Cantidad</th>
-            <th style={estiloCelda}>Agregado</th>
-            <th style={estiloCelda}>Pérdidas</th>
-            <th style={estiloCelda}>Devolución</th>
-            <th style={estiloCelda}>%</th>
-            <th style={estiloCelda}>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {datosPuestos.map((puesto, indice) => (
-            <tr key={indice}>
-              <td style={estiloCelda}>{puesto.nombre}</td>
-              <td style={estiloCelda}>
-                <input
-                  type="text"
-                  value={puesto.cantidad}
-                  onChange={(e) => manejarCambioPuesto(indice, 'cantidad', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="text"
-                  value={puesto.agregado}
-                  onChange={(e) => manejarCambioPuesto(indice, 'agregado', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="text"
-                  value={puesto.perdidas}
-                  onChange={(e) => manejarCambioPuesto(indice, 'perdidas', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="text"
-                  value={puesto.devolucion}
-                  onChange={(e) => manejarCambioPuesto(indice, 'devolucion', e.target.value)}
-                  style={estiloInput}
-                />
-              </td>
-              <td style={estiloCelda}>
-                <input
-                  type="checkbox"
-                  checked={puesto.porcentaje}
-                  onChange={(e) => manejarCambioPuesto(indice, 'porcentaje', e.target.checked)}
-                />
-              </td>
-              <td style={estiloCelda}>₡{puesto.total}</td>
+      <div style={{ marginTop: '15px', ...responsiveStyle }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Cantidad ({diaVisible})</th>
+              <th>Agregado</th>
+              <th>Pérdidas</th>
+              <th>Devolución</th>
+              <th>%</th>
+              <th>Total</th>
+              <th>Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {datosPuestos.map((puesto) => (
+              <tr key={puesto.id}>
+                <td>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <input
+                      type="text"
+                      value={edicionPuesto.nombre}
+                      onChange={(e) => manejarCambioEdicion('nombre', e.target.value)}
+                    />
+                  ) : (
+                    puesto.nombre
+                  )}
+                </td>
+                <td>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <input
+                      type="number"
+                      value={edicionPuesto.cantidades[diaVisible]}
+                      onChange={(e) =>
+                        manejarCambioEdicion('cantidades', {
+                          ...edicionPuesto.cantidades,
+                          [diaVisible]: e.target.value,
+                        })
+                      }
+                    />
+                  ) : (
+                    puesto.cantidades[diaVisible]
+                  )}
+                </td>
+                <td>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <input
+                      type="number"
+                      value={edicionPuesto.agregado}
+                      onChange={(e) => manejarCambioEdicion('agregado', e.target.value)}
+                    />
+                  ) : (
+                    puesto.agregado
+                  )}
+                </td>
+                <td>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <input
+                      type="number"
+                      value={edicionPuesto.perdidas}
+                      onChange={(e) => manejarCambioEdicion('perdidas', e.target.value)}
+                    />
+                  ) : (
+                    puesto.perdidas
+                  )}
+                </td>
+                <td>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <input
+                      type="number"
+                      value={edicionPuesto.devolucion}
+                      onChange={(e) => manejarCambioEdicion('devolucion', e.target.value)}
+                    />
+                  ) : (
+                    puesto.devolucion
+                  )}
+                </td>
+                <td>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <input
+                      type="number"
+                      value={edicionPuesto.porcentaje}
+                      onChange={(e) => manejarCambioEdicion('porcentaje', e.target.value)}
+                    />
+                  ) : (
+                    puesto.porcentaje
+                  )}
+                </td>
+                <td>{puesto.total}</td>
+                <td>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
+                  ) : (
+                    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>Editar</button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <button onClick={calcularTotales} style={estiloBoton}>
-        Calcular
+      <button onClick={calcularTotales} style={{ ...estilosBoton, marginTop: '20px', padding: '10px 16px' }}>
+        Calcular Totales
       </button>
 
-      <h3>Totales Generales</h3>
-      <p>Total Devolución: ₡{totales.devolucion}</p>
-      <p>Total Pérdida: ₡{totales.perdida }</p>
-      <p>Total General: ₡{totales.general}</p>
+      {totalGeneral > 0 && (
+        <div style={{ marginTop: '15px', fontWeight: 'bold', fontSize: '1.2em' }}>
+          Total general: ₡{totalGeneral}
+        </div>
+      )}
     </div>
   );
-};
-
-const estiloCelda = {
-  border: '1px solid #ddd',
-  padding: '8px',
-  textAlign: 'center',
-};
-
-const estiloInput = {
-  width: '80px',
-  padding: '4px',
-};
-
-const estiloBoton = {
-  marginTop: '20px',
-  padding: '10px 20px',
-  fontSize: '16px',
-  backgroundColor:'#6f42c1',
 };
 
 export default CalculadoraLoteria;

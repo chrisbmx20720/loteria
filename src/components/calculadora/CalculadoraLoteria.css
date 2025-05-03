@@ -1,34 +1,57 @@
 .calculadora-loteria {
-    font-family: Arial, sans-serif;
-    padding: 20px;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.dias label {
+  margin-right: 15px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+/* Evitar que los inputs se expandan demasiado */
+input[type='text'],
+input[type='number'] {
+  width: 90px;
+  max-width: 100%;
+  padding: 4px 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Ajustar a pantallas pequeñas */
+@media (max-width: 600px) {
+  input[type='text'],
+  input[type='number'] {
+    width: 70px;
+    font-size: 12px;
   }
-  
-  .dias label {
-    margin-right: 15px;
-  }
-  
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  
-  th, td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    text-align: center;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-  .btn-purple {
-    background-color: #6f42c1 !important;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-size: 16px;
-  }
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.btn-purple {
+  background-color: #6f42c1 !important;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+}

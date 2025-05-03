@@ -1,0 +1,46 @@
+{
+  "puestos": [
+    {
+      "id": "a151",
+      "nombre": "Puesto A",
+      "cantidades": {
+        "dia1": 100,
+        "dia2": 90,
+        "dia3": 80
+      },
+      "agregado": 0,
+      "perdidas": 0,
+      "devolucion": 0,
+      "porcentaje": true,
+      "total": 0
+    },
+    {
+      "id": "896f",
+      "nombre": "Puesto B",
+      "cantidades": {
+        "dia1": 105,
+        "dia2": 95,
+        "dia3": 85
+      },
+      "agregado": 0,
+      "perdidas": 0,
+      "devolucion": 0,
+      "porcentaje": false,
+      "total": 0
+    },
+    {
+      "id": "9d09",
+      "nombre": "Puesto C",
+      "cantidades": {
+        "dia1": 80,
+        "dia2": 100,
+        "dia3": 90
+      },
+      "agregado": 0,
+      "perdidas": 0,
+      "devolucion": 0,
+      "porcentaje": true,
+      "total": 0
+    }
+  ]
+}
