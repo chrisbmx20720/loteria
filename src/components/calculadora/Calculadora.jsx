@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CalculadoraLoteria.css';
-import { FaPlus, FaCalculator } from 'react-icons/fa'; // Íconos
+import { FaPlus, FaCalculator, FaEdit, FaSave } from 'react-icons/fa'; // Íconos
 
 const precios = {
   lunes: 1000,
@@ -120,15 +120,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
         </label>
       </div>
 
-      <div
-        style={{
-          marginTop: '10px',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          gap: '15px',
-        }}
-      >
+      <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '15px' }}>
         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
           <strong>Días con precio:</strong>
           {Object.keys(precios).map((dia) => (
@@ -144,7 +136,6 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
           ))}
         </div>
 
-        {/* Botones de vista con íconos */}
         <div style={{ display: 'flex', gap: '10px' }}>
           <button style={estilosBoton1} onClick={() => setVista('registro')}>
             <FaPlus /> Registrar Puesto
@@ -246,9 +237,13 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
                 <td>{puesto.total}</td>
                 <td>
                   {edicionPuesto?._id === puesto._id ? (
-                    <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
+                    <button style={estilosBoton1} onClick={guardarEdicion}>
+                      <FaSave /> Guardar
+                    </button>
                   ) : (
-                    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>Editar</button>
+                    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>
+                      <FaEdit /> Editar
+                    </button>
                   )}
                 </td>
               </tr>
