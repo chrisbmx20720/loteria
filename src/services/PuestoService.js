@@ -110,7 +110,7 @@ export const deletePuesto = async (id) => {
 */
 
 // src/services/puestosService.js
-const API_URL = 'http://localhost:3001/puestos';
+const API_URL = 'https://calculadoraapi-f86y.onrender.com/api/puestos';
 
 export const obtenerPuestos = async () => {
   const res = await fetch(API_URL);
@@ -128,7 +128,7 @@ export const crearPuesto = async (nuevoPuesto) => {
 
 
 export const editarPuesto = (puestoId, puestoActualizado) => {
-  return fetch(`http://localhost:3001/puestos/${puestoId}`, {
+  return fetch(`https://calculadoraapi-f86y.onrender.com/api/puestos${puestoId}`, {
     method: 'PUT',
     body: JSON.stringify(puestoActualizado),
     headers: {
