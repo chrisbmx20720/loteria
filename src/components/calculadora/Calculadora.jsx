@@ -66,6 +66,12 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
   };
 
   const guardarEdicion = () => {
+    if (!edicionPuesto || !edicionPuesto._id) {
+      console.error("Error: El puesto a guardar no tiene un _id válido.");
+      alert("No se puede guardar el puesto porque falta el identificador único (_id).");
+      return;
+    }
+
     actualizarPuesto(edicionPuesto);
 
     setDatosPuestos((prevPuestos) =>
@@ -94,6 +100,20 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
         [campo]: valor,
       };
     });
+  };
+
+  const agregarPuesto = () => {
+    const nuevoPuesto = {
+      _id: Date.now().toString(), // O usar una librería como uuid
+      nombre: '',
+      cantidades: {},
+      agregado: 0,
+      perdidas: 0,
+      devolucion: 0,
+      porcentaje: 0,
+      total: '0.00',
+    };
+    setDatosPuestos((prev) => [...prev, nuevoPuesto]);
   };
 
   const estilosBoton = {
@@ -265,7 +285,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
           Calcular Totales
         </button>
 
-        <button style={{ ...estilosBoton, backgroundColor: '#17a2b8' }}>
+        <button style={{ ...estilosBoton, backgroundColor: '#17a2b8' }} onClick={agregarPuesto}>
           Agregar Puesto
         </button>
 
