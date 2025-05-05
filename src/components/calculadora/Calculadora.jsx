@@ -147,7 +147,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
           </thead>
           <tbody>
             {datosPuestos.map((puesto) => (
-              <tr key={puesto.id}>
+              <tr key={puesto._id}>
                 <td>
                   {edicionPuesto?.id === puesto.id ? (
                     <input
