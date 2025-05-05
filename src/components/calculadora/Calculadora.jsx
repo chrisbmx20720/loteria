@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './CalculadoraLoteria.css';
-import { FaPlus, FaCalculator } from 'react-icons/fa';
 
 const precios = {
   lunes: 1000,
@@ -8,7 +7,7 @@ const precios = {
   miércoles: 2000,
 };
 
-const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
+const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
   const [datosPuestos, setDatosPuestos] = useState([]);
   const [diaVisible, setDiaVisible] = useState('dia1');
   const [diasSeleccionados, setDiasSeleccionados] = useState([]);
@@ -95,14 +94,11 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
     padding: '6px 10px',
     margin: '2px',
     cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '5px',
   };
 
   const responsiveStyle = {
     overflowX: 'auto',
-    width: '100%',
+    maxWidth: '100%',
   };
 
   return (
@@ -120,43 +116,23 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
         </label>
       </div>
 
-      <div
-        style={{
-          marginTop: '10px',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          gap: '15px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-          <strong>Días con precio:</strong>
-          {Object.keys(precios).map((dia) => (
-            <label key={dia} style={{ marginLeft: '10px' }}>
-              <input
-                type="checkbox"
-                value={dia}
-                checked={diasSeleccionados.includes(dia)}
-                onChange={() => manejarSeleccionDiaPrecio(dia)}
-              />
-              {` ${dia} (₡${precios[dia]})`}
-            </label>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button style={estilosBoton1} onClick={() => setVista('registro')}>
-            <FaPlus /> Registrar Puesto
-          </button>
-          <button style={estilosBoton1} onClick={() => setVista('calcular')}>
-            <FaCalculator /> Ver Calculadora
-          </button>
-        </div>
+      <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap' }}>
+        <strong>Días con precio:</strong>
+        {Object.keys(precios).map((dia) => (
+          <label key={dia} style={{ marginLeft: '10px' }}>
+            <input
+              type="checkbox"
+              value={dia}
+              checked={diasSeleccionados.includes(dia)}
+              onChange={() => manejarSeleccionDiaPrecio(dia)}
+            />
+            {` ${dia} (₡${precios[dia]})`}
+          </label>
+        ))}
       </div>
 
-      {/* Contenedor responsivo de tabla */}
       <div style={{ marginTop: '15px', ...responsiveStyle }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
           <thead>
             <tr>
               <th>Nombre</th>
@@ -178,7 +154,10 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
                       type="text"
                       value={edicionPuesto.nombre}
                       onChange={(e) => manejarCambioEdicion('nombre', e.target.value)}
+                      
                     />
+                    
+                    
                   ) : (
                     puesto.nombre
                   )}
