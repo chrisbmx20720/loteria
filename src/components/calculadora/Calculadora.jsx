@@ -38,7 +38,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
     let totalGeneral = 0;
 
     const nuevosPuestos = datosPuestos.map((puesto) => {
-      const cantidad = Number(puesto.cantidades[diaVisible]) || 0;
+      const cantidad = Number(puesto.cantidades?.[diaVisible]) || 0;
       const agregado = Number(puesto.agregado) || 0;
       const perdidas = Number(puesto.perdidas) || 0;
       const tienePorcentaje = puesto.porcentaje;
@@ -67,6 +67,13 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
 
   const guardarEdicion = () => {
     actualizarPuesto(edicionPuesto);
+
+    setDatosPuestos((prevPuestos) =>
+      prevPuestos.map((p) =>
+        p._id === edicionPuesto._id ? { ...edicionPuesto } : p
+      )
+    );
+
     setEdicionPuesto(null);
   };
 
@@ -223,14 +230,29 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                 </td>
                 <td>{puesto.total}</td>
                 <td>
-                  <button
-                    style={{ ...estilosBoton, backgroundColor: edicionPuesto?._id === puesto._id ? '#28a745' : '#007bff' }}
-                    onClick={() =>
-                      edicionPuesto?._id === puesto._id ? guardarEdicion() : editarPuesto(puesto)
-                    }
-                  >
-                    {edicionPuesto?._id === puesto._id ? <FaSave /> : <FaEdit />}
-                  </button>
+                  {edicionPuesto?._id === puesto._id ? (
+                    <>
+                      <button
+                        style={{ ...estilosBoton, backgroundColor: '#28a745' }}
+                        onClick={guardarEdicion}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        style={{ ...estilosBoton, backgroundColor: '#dc3545' }}
+                        onClick={() => setEdicionPuesto(null)}
+                      >
+                        Cancelar
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      style={{ ...estilosBoton, backgroundColor: '#007bff' }}
+                      onClick={() => editarPuesto(puesto)}
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -238,7 +260,6 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
         </table>
       </div>
 
-      {/* Botones finales */}
       <div style={{ marginTop: '25px' }}>
         <button style={{ ...estilosBoton, backgroundColor: '#28a745' }} onClick={calcularTotales}>
           Calcular Totales
