@@ -34,7 +34,6 @@ const App = () => {
     <div style={{ padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
         <button onClick={() => setVista('registro')}>Registrar Puesto</button>
-        <button onClick={() => setVista('calcular')}>Ver Calculadora</button>
       </div>
 
       {vista === 'registro' ? (
