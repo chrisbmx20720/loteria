@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import './CalculadoraLoteria.css';
 
 const precios = {
   lunes: 1000,
