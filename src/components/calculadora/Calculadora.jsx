@@ -147,9 +147,9 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
           </thead>
           <tbody>
             {datosPuestos.map((puesto) => (
-              <tr key={puesto.id}>
+              <tr key={puesto._id}>
                 <td>
-                  {edicionPuesto?.id === puesto.id ? (
+                  {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="text"
                       value={edicionPuesto.nombre}
@@ -163,7 +163,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?.id === puesto.id ? (
+                  {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="number"
                       value={edicionPuesto.cantidades[diaVisible]}
@@ -179,7 +179,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?.id === puesto.id ? (
+                  {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="number"
                       value={edicionPuesto.agregado}
@@ -190,7 +190,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?.id === puesto.id ? (
+                  {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="number"
                       value={edicionPuesto.perdidas}
@@ -201,7 +201,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?.id === puesto.id ? (
+                  {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="number"
                       value={edicionPuesto.devolucion}
@@ -212,7 +212,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?.id === puesto.id ? (
+                  {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="number"
                       value={edicionPuesto.porcentaje}
@@ -224,7 +224,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                 </td>
                 <td>{puesto.total}</td>
                 <td>
-                  {edicionPuesto?.id === puesto.id ? (
+                  {edicionPuesto?._id === puesto._id ? (
                     <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
                   ) : (
                     <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>Editar</button>
