@@ -71,10 +71,22 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
   };
 
   const manejarCambioEdicion = (campo, valor) => {
-    setEdicionPuesto((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
+    setEdicionPuesto((prev) => {
+      if (campo === 'cantidades') {
+        return {
+          ...prev,
+          cantidades: {
+            ...prev.cantidades,
+            ...valor,
+          },
+        };
+      }
+
+      return {
+        ...prev,
+        [campo]: valor,
+      };
+    });
   };
 
   const estilosBoton = {
@@ -154,16 +166,15 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="number"
-                      value={edicionPuesto.cantidades[diaVisible]}
+                      value={edicionPuesto.cantidades?.[diaVisible] || ''}
                       onChange={(e) =>
                         manejarCambioEdicion('cantidades', {
-                          ...edicionPuesto.cantidades,
                           [diaVisible]: e.target.value,
                         })
                       }
                     />
                   ) : (
-                    puesto.cantidades[diaVisible]
+                    puesto.cantidades?.[diaVisible] || 0
                   )}
                 </td>
                 <td>
@@ -237,7 +248,6 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
           Agregar Puesto
         </button>
 
-        {/* Puedes eliminar este si ya no quieres mostrarlo */}
         <button style={{ ...estilosBoton, backgroundColor: '#ffc107' }}>
           Ver Calculadora
         </button>
