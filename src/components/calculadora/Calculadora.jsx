@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit, FaSave } from 'react-icons/fa';
-import './CalculadoraLoteria.css';
+
 
 const precios = {
   lunes: 1000,
@@ -38,7 +37,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
     let totalGeneral = 0;
 
     const nuevosPuestos = datosPuestos.map((puesto) => {
-      const cantidad = Number(puesto.cantidades?.[diaVisible]) || 0;
+      const cantidad = Number(puesto.cantidades[diaVisible]) || 0;
       const agregado = Number(puesto.agregado) || 0;
       const perdidas = Number(puesto.perdidas) || 0;
       const tienePorcentaje = puesto.porcentaje;
@@ -66,54 +65,15 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
   };
 
   const guardarEdicion = () => {
-    if (!edicionPuesto || !edicionPuesto._id) {
-      console.error("Error: El puesto a guardar no tiene un _id válido.");
-      alert("No se puede guardar el puesto porque falta el identificador único (_id).");
-      return;
-    }
-
     actualizarPuesto(edicionPuesto);
-
-    setDatosPuestos((prevPuestos) =>
-      prevPuestos.map((p) =>
-        p._id === edicionPuesto._id ? { ...edicionPuesto } : p
-      )
-    );
-
     setEdicionPuesto(null);
   };
 
   const manejarCambioEdicion = (campo, valor) => {
-    setEdicionPuesto((prev) => {
-      if (campo === 'cantidades') {
-        return {
-          ...prev,
-          cantidades: {
-            ...prev.cantidades,
-            ...valor,
-          },
-        };
-      }
-
-      return {
-        ...prev,
-        [campo]: valor,
-      };
-    });
-  };
-
-  const agregarPuesto = () => {
-    const nuevoPuesto = {
-      _id: Date.now().toString(), // O usar una librería como uuid
-      nombre: '',
-      cantidades: {},
-      agregado: 0,
-      perdidas: 0,
-      devolucion: 0,
-      porcentaje: 0,
-      total: '0.00',
-    };
-    setDatosPuestos((prev) => [...prev, nuevoPuesto]);
+    setEdicionPuesto((prev) => ({
+      ...prev,
+      [campo]: valor,
+    }));
   };
 
   const estilosBoton = {
@@ -121,8 +81,18 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
     color: '#fff',
     border: 'none',
     borderRadius: '5px',
-    padding: '8px 14px',
-    margin: '5px',
+    padding: '6px 10px',
+    margin: '2px',
+    cursor: 'pointer',
+  };
+
+  const estilosBoton1 = {
+    backgroundColor: '#d4edda',
+    color: '#0b2e13',
+    border: 'none',
+    borderRadius: '5px',
+    padding: '6px 10px',
+    margin: '2px',
     cursor: 'pointer',
   };
 
@@ -135,7 +105,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
     <div style={{ padding: '10px' }}>
       <h2>Calculadora de Lotería</h2>
 
-      <div style={{ marginBottom: '10px' }}>
+      <div>
         <label>
           Día visible:
           <select value={diaVisible} onChange={(e) => setDiaVisible(e.target.value)} style={{ marginLeft: '10px' }}>
@@ -146,7 +116,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
         </label>
       </div>
 
-      <div style={{ marginBottom: '20px', display: 'flex', flexWrap: 'wrap' }}>
+      <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap' }}>
         <strong>Días con precio:</strong>
         {Object.keys(precios).map((dia) => (
           <label key={dia} style={{ marginLeft: '10px' }}>
@@ -161,7 +131,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
         ))}
       </div>
 
-      <div style={{ ...responsiveStyle }}>
+      <div style={{ marginTop: '15px', ...responsiveStyle }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
           <thead>
             <tr>
@@ -177,9 +147,9 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
           </thead>
           <tbody>
             {datosPuestos.map((puesto) => (
-              <tr key={puesto._id}>
+              <tr key={puesto.id}>
                 <td>
-                  {edicionPuesto?._id === puesto._id ? (
+                  {edicionPuesto?.id === puesto.id ? (
                     <input
                       type="text"
                       value={edicionPuesto.nombre}
@@ -190,22 +160,23 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?._id === puesto._id ? (
+                  {edicionPuesto?.id === puesto.id ? (
                     <input
                       type="number"
-                      value={edicionPuesto.cantidades?.[diaVisible] || ''}
+                      value={edicionPuesto.cantidades[diaVisible]}
                       onChange={(e) =>
                         manejarCambioEdicion('cantidades', {
+                          ...edicionPuesto.cantidades,
                           [diaVisible]: e.target.value,
                         })
                       }
                     />
                   ) : (
-                    puesto.cantidades?.[diaVisible] || 0
+                    puesto.cantidades[diaVisible]
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?._id === puesto._id ? (
+                  {edicionPuesto?.id === puesto.id ? (
                     <input
                       type="number"
                       value={edicionPuesto.agregado}
@@ -216,7 +187,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?._id === puesto._id ? (
+                  {edicionPuesto?.id === puesto.id ? (
                     <input
                       type="number"
                       value={edicionPuesto.perdidas}
@@ -227,7 +198,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?._id === puesto._id ? (
+                  {edicionPuesto?.id === puesto.id ? (
                     <input
                       type="number"
                       value={edicionPuesto.devolucion}
@@ -238,7 +209,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   )}
                 </td>
                 <td>
-                  {edicionPuesto?._id === puesto._id ? (
+                  {edicionPuesto?.id === puesto.id ? (
                     <input
                       type="number"
                       value={edicionPuesto.porcentaje}
@@ -250,28 +221,10 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                 </td>
                 <td>{puesto.total}</td>
                 <td>
-                  {edicionPuesto?._id === puesto._id ? (
-                    <>
-                      <button
-                        style={{ ...estilosBoton, backgroundColor: '#28a745' }}
-                        onClick={guardarEdicion}
-                      >
-                        <FaSave />
-                      </button>
-                      <button
-                        style={{ ...estilosBoton, backgroundColor: '#dc3545' }}
-                        onClick={() => setEdicionPuesto(null)}
-                      >
-                        Cancelar
-                      </button>
-                    </>
+                  {edicionPuesto?.id === puesto.id ? (
+                    <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
                   ) : (
-                    <button
-                      style={{ ...estilosBoton, backgroundColor: '#007bff' }}
-                      onClick={() => editarPuesto(puesto)}
-                    >
-                      <FaEdit />
-                    </button>
+                    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>Editar</button>
                   )}
                 </td>
               </tr>
@@ -280,19 +233,9 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
         </table>
       </div>
 
-      <div style={{ marginTop: '25px' }}>
-        <button style={{ ...estilosBoton, backgroundColor: '#28a745' }} onClick={calcularTotales}>
-          Calcular Totales
-        </button>
-
-        <button style={{ ...estilosBoton, backgroundColor: '#17a2b8' }} onClick={agregarPuesto}>
-          Agregar Puesto
-        </button>
-
-        <button style={{ ...estilosBoton, backgroundColor: '#ffc107' }}>
-          Ver Calculadora
-        </button>
-      </div>
+      <button onClick={calcularTotales} style={{ ...estilosBoton, marginTop: '20px', padding: '10px 16px' }}>
+        Calcular Totales
+      </button>
 
       {totalGeneral > 0 && (
         <div style={{ marginTop: '15px', fontWeight: 'bold', fontSize: '1.2em' }}>
