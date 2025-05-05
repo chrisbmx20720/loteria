@@ -224,16 +224,12 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                 </td>
                 <td>{puesto.total}</td>
                 <td>
-  {edicionPuesto?._id === puesto._id ? (
-    <button style={estilosBoton1} onClick={guardarEdicion}>
-      <FaSave />
-    </button>
-  ) : (
-    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>
-      <FaEdit />
-    </button>
-  )}
-</td>
+                  {edicionPuesto?._id === puesto._id ? (
+                    <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
+                  ) : (
+                    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>Editar</button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
