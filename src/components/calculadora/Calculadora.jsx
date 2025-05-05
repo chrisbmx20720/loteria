@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CalculadoraLoteria.css';
-import { FaPlus, FaCalculator, FaEdit, FaSave } from 'react-icons/fa'; // Íconos
+import { FaPlus, FaCalculator } from 'react-icons/fa';
 
 const precios = {
   lunes: 1000,
@@ -102,7 +102,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
 
   const responsiveStyle = {
     overflowX: 'auto',
-    maxWidth: '100%',
+    width: '100%',
   };
 
   return (
@@ -120,7 +120,15 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
         </label>
       </div>
 
-      <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '15px' }}>
+      <div
+        style={{
+          marginTop: '10px',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '15px',
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
           <strong>Días con precio:</strong>
           {Object.keys(precios).map((dia) => (
@@ -146,8 +154,9 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
         </div>
       </div>
 
+      {/* Contenedor responsivo de tabla */}
       <div style={{ marginTop: '15px', ...responsiveStyle }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               <th>Nombre</th>
@@ -237,13 +246,9 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto, vista, setVista }) => {
                 <td>{puesto.total}</td>
                 <td>
                   {edicionPuesto?._id === puesto._id ? (
-                    <button style={estilosBoton1} onClick={guardarEdicion}>
-                      <FaSave /> Guardar
-                    </button>
+                    <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
                   ) : (
-                    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>
-                      <FaEdit /> Editar
-                    </button>
+                    <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>Editar</button>
                   )}
                 </td>
               </tr>
