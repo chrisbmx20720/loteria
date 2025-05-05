@@ -61,7 +61,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
   };
 
   const editarPuesto = (puesto) => {
-    setEdicionPuesto({ ...puesto });
+    setEdicionPuesto({ ...puesto }); // Clona el puesto que se va a editar
   };
 
   const guardarEdicion = () => {
@@ -70,10 +70,18 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
   };
 
   const manejarCambioEdicion = (campo, valor) => {
-    setEdicionPuesto((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
+    setEdicionPuesto((prev) => {
+      if (campo === 'cantidades') {
+        return {
+          ...prev,
+          cantidades: valor,
+        };
+      }
+      return {
+        ...prev,
+        [campo]: valor,
+      };
+    });
   };
 
   const estilosBoton = {
@@ -154,10 +162,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                       type="text"
                       value={edicionPuesto.nombre}
                       onChange={(e) => manejarCambioEdicion('nombre', e.target.value)}
-                      
                     />
-                    
-                    
                   ) : (
                     puesto.nombre
                   )}
@@ -166,7 +171,7 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                   {edicionPuesto?._id === puesto._id ? (
                     <input
                       type="number"
-                      value={edicionPuesto.cantidades[diaVisible]}
+                      value={edicionPuesto.cantidades?.[diaVisible] || ''}
                       onChange={(e) =>
                         manejarCambioEdicion('cantidades', {
                           ...edicionPuesto.cantidades,
@@ -225,7 +230,15 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                 <td>{puesto.total}</td>
                 <td>
                   {edicionPuesto?._id === puesto._id ? (
-                    <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
+                    <>
+                      <button style={estilosBoton1} onClick={guardarEdicion}>Guardar</button>
+                      <button
+                        style={{ ...estilosBoton1, backgroundColor: '#f8d7da', color: '#721c24' }}
+                        onClick={() => setEdicionPuesto(null)}
+                      >
+                        Cancelar
+                      </button>
+                    </>
                   ) : (
                     <button style={estilosBoton1} onClick={() => editarPuesto(puesto)}>Editar</button>
                   )}
