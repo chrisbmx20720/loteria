@@ -154,7 +154,10 @@ const CalculadoraLoteria = ({ puestos, actualizarPuesto }) => {
                       type="text"
                       value={edicionPuesto.nombre}
                       onChange={(e) => manejarCambioEdicion('nombre', e.target.value)}
+                      
                     />
+                    
+                    
                   ) : (
                     puesto.nombre
                   )}
